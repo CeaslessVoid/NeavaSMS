@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "f7ca3v679jA=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Neava\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\NeavaSMS\\NeavaSMS.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Neava\\.nuget\\packages\\tmodloader.codeassist\\0.1.5\\tmodloader.codeassist.0.1.5.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,3 @@
+displayName = Sword Master Story
+author = Neava
+version = 0.1

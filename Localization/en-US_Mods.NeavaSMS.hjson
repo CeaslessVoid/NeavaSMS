@@ -1,0 +1,8 @@
+Projectiles.Ariel.DisplayName: Ariel
+
+Items: {
+	TestSummonItem: {
+		Tooltip: ""
+		DisplayName: Test Summon Item
+	}
+}

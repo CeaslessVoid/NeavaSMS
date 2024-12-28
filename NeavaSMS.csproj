@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<!-- Import tModLoader mod properties -->
+	<Import Project="..\tModLoader.targets" />
+
+	<!-- General -->
+	<PropertyGroup>
+		
+	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="Content\items\TestSummonItem.png" />
+	  <None Remove="Sprites\Summons\Ariel\Ariel.png" />
+	</ItemGroup>
+
+	<!-- References -->
+
+</Project>
