@@ -228,3 +228,4 @@ C:\Users\Neava\Documents\My Games\Terraria\tModLoader\ModSources\NeavaSMS\obj\De
 C:\Users\Neava\Documents\My Games\Terraria\tModLoader\ModSources\NeavaSMS\obj\Debug\net8.0\refint\NeavaSMS.dll
 C:\Users\Neava\Documents\My Games\Terraria\tModLoader\ModSources\NeavaSMS\obj\Debug\net8.0\NeavaSMS.pdb
 C:\Users\Neava\Documents\My Games\Terraria\tModLoader\ModSources\NeavaSMS\obj\Debug\net8.0\ref\NeavaSMS.dll
+C:\Users\Neava\Documents\My Games\Terraria\tModLoader\ModSources\NeavaSMS\obj\Debug\net8.0\NeavaSMS.sourcelink.json
