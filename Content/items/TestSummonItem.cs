@@ -25,7 +25,7 @@ namespace NeavaSMS.Content.items
             if (player.ownedProjectileCounts[ModContent.ProjectileType<Ariel>()] < 1)
             {
                 Projectile.NewProjectile(player.GetSource_Accessory(Item), player.Center, player.velocity,
-                    ModContent.ProjectileType<Ariel>(), 10, 0f, player.whoAmI);
+                    ModContent.ProjectileType<Ariel>(), 0, 0f, player.whoAmI);
             }
         }
     }

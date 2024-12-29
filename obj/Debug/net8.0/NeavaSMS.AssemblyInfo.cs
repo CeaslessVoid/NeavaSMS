@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NeavaSMS")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+815b0832ee6c306956840df4c97bc7d14f0e5fac")]
 [assembly: System.Reflection.AssemblyProductAttribute("NeavaSMS")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NeavaSMS")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
