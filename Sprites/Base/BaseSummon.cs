@@ -14,15 +14,15 @@ using Terraria.ModLoader;
 
 namespace NeavaSMS.Sprites.Summons.Ariel
 {
-    public class Ariel : ModProjectile
+    public class BaseSummon : ModProjectile
     {
 
         // Constnats
 
 
         //Sprites
-        private const int   FrameWidth = 766;
-        private const int   FrameHeight = 506;
+        private int   FrameWidth;
+        private int   FrameHeight;
 
         //Physics
         private const float GravityForce = 0.4f;
@@ -44,15 +44,17 @@ namespace NeavaSMS.Sprites.Summons.Ariel
 
         private const int   UltimateCooldownMax = 1400;
 
+        //public const List<float> GlowColour;
+
         // Non Constants
 
         //AI
         private bool    attackHitRegistered = false;
         private bool    isAtking = false;
         private bool    isOnGround = false;
-        private NPC     closestNPC;
         private int     groundedBuffer;
         private int     ultimateCooldown = 0;
+        private NPC closestNPC;
 
         //Sprites
         private SMSsummon.AnimationState? previousAnimationState;
@@ -106,12 +108,10 @@ namespace NeavaSMS.Sprites.Summons.Ariel
             int tileX = (int)(Projectile.Center.X / 16f);
             int tileY = (int)(Projectile.Bottom.Y / 16f);
 
-            Tile tileBelow = Framing.GetTileSafely(tileX, tileY + 1);
-            Tile tileBelow2 = Framing.GetTileSafely(tileX + 1, tileY + 1);
+            Tile tileBelow = Framing.GetTileSafely(tileX, tileY + 1);;
 
             isOnGround =
-                (tileBelow.HasTile && Main.tileSolid[tileBelow.TileType]
-                || tileBelow2.HasTile && Main.tileSolid[tileBelow.TileType]);
+                (tileBelow.HasTile && Main.tileSolid[tileBelow.TileType]);
 
             groundedBuffer = (int)Projectile.localAI[1];
 
@@ -177,17 +177,7 @@ namespace NeavaSMS.Sprites.Summons.Ariel
             Vector2 targetPosition = FindTarget(player);
             Vector2 moveTo = targetPosition - Projectile.Center;
 
-
-            Rectangle attackHitbox;
-            if (summonData.CurrentAnimationState == SMSsummon.AnimationState.Attacking && Projectile.frame >= 6)
-            {
-                attackHitbox = GetAttackRectangle(summonData, 2);
-            }
-            else
-            {
-                attackHitbox = GetAttackRectangle(summonData, 1);
-            }
-
+            Rectangle attackHitbox = AttackHitbox(summonData);
 
             bool target = false;
             CheckForHostileNPCs(attackHitbox, 0, DamageClass.Generic, true, out target);
@@ -221,6 +211,12 @@ namespace NeavaSMS.Sprites.Summons.Ariel
                 summonData.CurrentAnimationState = SMSsummon.AnimationState.Idle;
                 Projectile.velocity.X *= 0f;
             }
+        }
+
+        // Detect Hit
+        public virtual Rectangle AttackHitbox(SMSsummon summonData)
+        {
+            return new Rectangle();
         }
 
         private Vector2 FindTarget(Player player)
@@ -461,7 +457,7 @@ namespace NeavaSMS.Sprites.Summons.Ariel
             if (ultimateCooldown > 0)
                 ultimateCooldown--;
 
-            if (Projectile.frameCounter >= frameCooldown(summonData) && !framelock)
+            if (Projectile.frameCounter >= 5 && !framelock)
             {
                 Projectile.frameCounter = 0;
                 Projectile.frame = (Projectile.frame + 1) % totalFrames;
@@ -494,19 +490,6 @@ namespace NeavaSMS.Sprites.Summons.Ariel
                     Projectile.velocity.Y = 0;
                 }
             }
-        }
-
-        public int frameCooldown(SMSsummon summonData)
-        {
-
-            if (summonData.CurrentAnimationState == SMSsummon.AnimationState.Idle)
-                return 9;
-            else if (summonData.CurrentAnimationState == SMSsummon.AnimationState.Running)
-                return 8;
-            else if (summonData.CurrentAnimationState == SMSsummon.AnimationState.Attacking)
-                return 6;
-
-            return 6;
         }
 
         public override void Load()
@@ -559,135 +542,9 @@ namespace NeavaSMS.Sprites.Summons.Ariel
             );
         }
 
-        private Rectangle GetUtlRectangle(SMSsummon summonData)
+        public virtual Rectangle GetUtlRectangle(SMSsummon summonData)
         {
-            float widthScale = 2;
-            float heightScale = 5;
-            float verticalOffset = 0;
-            float horizontalOffsetMultiplier = FrameWidth / 2f;
-
-            float boxWidth = FrameWidth * widthScale;
-            float boxHeight = FrameHeight * heightScale;
-
-            float directionMultiplier = summonData.spriteEffects == SpriteEffects.None ? 1f : -1f;
-
-            Vector2 rectangleOffset = new Vector2(horizontalOffsetMultiplier * directionMultiplier, verticalOffset);
-            Vector2 rectanglePosition = Projectile.Center + rectangleOffset;
-
-            return new Rectangle(
-                (int)(rectanglePosition.X - boxWidth / 2),
-                (int)(rectanglePosition.Y - boxHeight / 2),
-                (int)boxWidth,
-                (int)boxHeight
-            );
-        }
-
-        private void DrawATKRectangle(Color lightColor, SMSsummon summonData)
-        {
-            Texture2D boxTexture = new Texture2D(Main.graphics.GraphicsDevice, 1, 1);
-            boxTexture.SetData(new Color[] { Color.Red });
-
-            float widthScale = 0.75f;
-            float heightScale = 0.5f;
-
-            float boxWidth = FrameWidth * widthScale;
-            float boxHeight = FrameHeight * heightScale;
-
-            float directionMultiplier = summonData.spriteEffects == SpriteEffects.None ? 1f : -1f;
-            Vector2 rectangleOffset = new Vector2(FrameWidth / 3f * directionMultiplier, -50f);
-
-            Vector2 rectanglePosition = Projectile.Center + rectangleOffset - Main.screenPosition;
-
-            Main.EntitySpriteDraw(boxTexture, new Vector2(rectanglePosition.X - boxWidth / 2, rectanglePosition.Y - boxHeight / 2),
-                null, Color.Red * 0.5f, 0f, Vector2.Zero, new Vector2(boxWidth, 1), SpriteEffects.None, 0);
-            Main.EntitySpriteDraw(boxTexture, new Vector2(rectanglePosition.X - boxWidth / 2, rectanglePosition.Y + boxHeight / 2),
-                null, Color.Red * 0.5f, 0f, Vector2.Zero, new Vector2(boxWidth, 1), SpriteEffects.None, 0);
-            Main.EntitySpriteDraw(boxTexture, new Vector2(rectanglePosition.X - boxWidth / 2, rectanglePosition.Y - boxHeight / 2),
-                null, Color.Red * 0.5f, 0f, Vector2.Zero, new Vector2(1, boxHeight), SpriteEffects.None, 0);
-            Main.EntitySpriteDraw(boxTexture, new Vector2(rectanglePosition.X + boxWidth / 2, rectanglePosition.Y - boxHeight / 2),
-                null, Color.Red * 0.5f, 0f, Vector2.Zero, new Vector2(1, boxHeight), SpriteEffects.None, 0);
-        }
-
-        private void DrawATKRectangle2(Color lightColor, SMSsummon summonData)
-        {
-            Texture2D boxTexture = new Texture2D(Main.graphics.GraphicsDevice, 1, 1);
-            boxTexture.SetData(new Color[] { Color.Red });
-
-            float widthScale = 0.75f;
-            float heightScale = 0.65f;
-
-            float boxWidth = FrameWidth * widthScale;
-            float boxHeight = FrameHeight * heightScale;
-
-            float directionMultiplier = summonData.spriteEffects == SpriteEffects.None ? 1f : -1f;
-            Vector2 rectangleOffset = new Vector2(FrameWidth / 5f * directionMultiplier, -87f);
-
-            Vector2 rectanglePosition = Projectile.Center + rectangleOffset - Main.screenPosition;
-
-            Main.EntitySpriteDraw(boxTexture, new Vector2(rectanglePosition.X - boxWidth / 2, rectanglePosition.Y - boxHeight / 2),
-                null, Color.Red * 0.5f, 0f, Vector2.Zero, new Vector2(boxWidth, 1), SpriteEffects.None, 0);
-            Main.EntitySpriteDraw(boxTexture, new Vector2(rectanglePosition.X - boxWidth / 2, rectanglePosition.Y + boxHeight / 2),
-                null, Color.Red * 0.5f, 0f, Vector2.Zero, new Vector2(boxWidth, 1), SpriteEffects.None, 0);
-            Main.EntitySpriteDraw(boxTexture, new Vector2(rectanglePosition.X - boxWidth / 2, rectanglePosition.Y - boxHeight / 2),
-                null, Color.Red * 0.5f, 0f, Vector2.Zero, new Vector2(1, boxHeight), SpriteEffects.None, 0);
-            Main.EntitySpriteDraw(boxTexture, new Vector2(rectanglePosition.X + boxWidth / 2, rectanglePosition.Y - boxHeight / 2),
-                null, Color.Red * 0.5f, 0f, Vector2.Zero, new Vector2(1, boxHeight), SpriteEffects.None, 0);
-        }
-    }
-
-    public class Ariel_Ultimate : ModProjectile
-    {
-        public override void SetStaticDefaults()
-        {
-            Main.projFrames[Projectile.type] = 6;
-        }
-
-        public override void SetDefaults()
-        {
-            Projectile.width = 766;
-            Projectile.height = 506;
-            Projectile.friendly = false;
-            Projectile.hostile = false;
-            Projectile.tileCollide = false;
-            Projectile.ignoreWater = true;
-            Projectile.penetrate = -1;
-            Projectile.timeLeft = 30;
-        }
-
-        public override void AI()
-        {
-            if (++Projectile.frameCounter >= 6)
-            {
-                Projectile.frame++;
-                Projectile.frameCounter = 0;
-                if (Projectile.frame >= Main.projFrames[Projectile.type])
-                {
-                    Projectile.Kill();
-                    for (int i = 0; i < 20; i++)
-                    {
-                        Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Rain, Scale: 1.5f);
-                    }
-                }
-            }
-
-            Lighting.AddLight(Projectile.Center, 0.1f, 0.5f, 1.0f);
-        }
-
-        public override bool PreDraw(ref Color lightColor)
-        {
-            float scale = 1.5f;
-            Main.EntitySpriteDraw(
-                TextureAssets.Projectile[Projectile.type].Value,
-                Projectile.Center - Main.screenPosition,
-                new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height),
-                lightColor,
-                Projectile.rotation,
-                new Vector2(Projectile.width / 2, Projectile.height / 2),
-                scale,
-                SpriteEffects.None,
-                0
-            );
-            return false;
+            return new Rectangle();
         }
     }
 }

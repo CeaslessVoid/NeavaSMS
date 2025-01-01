@@ -1,4 +1,7 @@
-Projectiles.Ariel.DisplayName: Ariel
+Projectiles: {
+	Ariel.DisplayName: Ariel
+	Ariel_Ultimate.DisplayName: Ariel_ Ultimate
+}
 
 Items: {
 	TestSummonItem: {

@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\Neava\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\NeavaSMS\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{8A3CE26E-073F-4B3B-A48F-A473761CB939}|NeavaSMS.csproj|c:\\users\\neava\\documents\\my games\\terraria\\tmodloader\\modsources\\neavasms\\sprites\\base\\basesummon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A3CE26E-073F-4B3B-A48F-A473761CB939}|NeavaSMS.csproj|solutionrelative:sprites\\base\\basesummon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{8A3CE26E-073F-4B3B-A48F-A473761CB939}|NeavaSMS.csproj|c:\\users\\neava\\documents\\my games\\terraria\\tmodloader\\modsources\\neavasms\\sprites\\summons\\ariel\\ariel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8A3CE26E-073F-4B3B-A48F-A473761CB939}|NeavaSMS.csproj|solutionrelative:sprites\\summons\\ariel\\ariel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8A3CE26E-073F-4B3B-A48F-A473761CB939}|NeavaSMS.csproj|c:\\users\\neava\\documents\\my games\\terraria\\tmodloader\\modsources\\neavasms\\common\\global\\smssummon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8A3CE26E-073F-4B3B-A48F-A473761CB939}|NeavaSMS.csproj|solutionrelative:common\\global\\smssummon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8A3CE26E-073F-4B3B-A48F-A473761CB939}|NeavaSMS.csproj|c:\\users\\neava\\documents\\my games\\terraria\\tmodloader\\modsources\\neavasms\\content\\items\\testsummonitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8A3CE26E-073F-4B3B-A48F-A473761CB939}|NeavaSMS.csproj|solutionrelative:content\\items\\testsummonitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A3CE26E-073F-4B3B-A48F-A473761CB939}|NeavaSMS.csproj|c:\\users\\neava\\documents\\my games\\terraria\\tmodloader\\modsources\\neavasms\\common\\global\\smssummon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A3CE26E-073F-4B3B-A48F-A473761CB939}|NeavaSMS.csproj|solutionrelative:common\\global\\smssummon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,39 +30,52 @@
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Ariel.cs",
+              "DocumentMoniker": "C:\\Users\\Neava\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\NeavaSMS\\Sprites\\Summons\\Ariel\\Ariel.cs",
+              "RelativeDocumentMoniker": "Sprites\\Summons\\Ariel\\Ariel.cs",
+              "ToolTip": "C:\\Users\\Neava\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\NeavaSMS\\Sprites\\Summons\\Ariel\\Ariel.cs",
+              "RelativeToolTip": "Sprites\\Summons\\Ariel\\Ariel.cs",
+              "ViewState": "AQIAAGIAAAAAAAAAAAAAAHEAAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-01T10:55:36.233Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "BaseSummon.cs",
+              "DocumentMoniker": "C:\\Users\\Neava\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\NeavaSMS\\Sprites\\Base\\BaseSummon.cs",
+              "RelativeDocumentMoniker": "Sprites\\Base\\BaseSummon.cs",
+              "ToolTip": "C:\\Users\\Neava\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\NeavaSMS\\Sprites\\Base\\BaseSummon.cs",
+              "RelativeToolTip": "Sprites\\Base\\BaseSummon.cs",
+              "ViewState": "AQIAAAsCAAAAAAAAAAAswCICAAAjAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-01T10:53:59.762Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 2,
               "Title": "TestSummonItem.cs",
               "DocumentMoniker": "C:\\Users\\Neava\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\NeavaSMS\\Content\\items\\TestSummonItem.cs",
               "RelativeDocumentMoniker": "Content\\items\\TestSummonItem.cs",
               "ToolTip": "C:\\Users\\Neava\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\NeavaSMS\\Content\\items\\TestSummonItem.cs",
               "RelativeToolTip": "Content\\items\\TestSummonItem.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABsAAAA9AAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-28T23:04:29.824Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Ariel.cs",
-              "DocumentMoniker": "C:\\Users\\Neava\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\NeavaSMS\\Sprites\\Summons\\Ariel\\Ariel.cs",
-              "RelativeDocumentMoniker": "Sprites\\Summons\\Ariel\\Ariel.cs",
-              "ToolTip": "C:\\Users\\Neava\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\NeavaSMS\\Sprites\\Summons\\Ariel\\Ariel.cs",
-              "RelativeToolTip": "Sprites\\Summons\\Ariel\\Ariel.cs",
-              "ViewState": "AQIAAK4BAAAAAAAAAAAEwMkBAAA6AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-28T23:00:41.352Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "SMSsummon.cs",
               "DocumentMoniker": "C:\\Users\\Neava\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\NeavaSMS\\Common\\Global\\SMSsummon.cs",
               "RelativeDocumentMoniker": "Common\\Global\\SMSsummon.cs",
               "ToolTip": "C:\\Users\\Neava\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\NeavaSMS\\Common\\Global\\SMSsummon.cs",
               "RelativeToolTip": "Common\\Global\\SMSsummon.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAUAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABoAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-28T23:26:57.906Z",
               "EditorCaption": ""
