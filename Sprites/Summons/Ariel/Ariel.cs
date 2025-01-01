@@ -24,6 +24,14 @@ namespace NeavaSMS.Sprites.Summons.Ariel
         private const int   FrameWidth = 766;
         private const int   FrameHeight = 506;
 
+        private readonly Dictionary<string, (float widthScale, float heightScale, float verticalOffset, float horizontalOffsetMultiplier)> rectangleSettings =
+            new Dictionary<string, (float, float, float, float)>
+            {
+                { "attack1", (0.75f, 0.5f, -50f, FrameWidth / 3f) },
+                { "attack2", (0.75f, 0.65f, -87f, FrameWidth / 5f) },
+                { "ultimate", (2f, 5f, 0f, FrameWidth / 2f) }
+            };
+
         //Physics
         private const float GravityForce = 0.4f;
         private const float MaxFallSpeed = 60f;
@@ -33,9 +41,8 @@ namespace NeavaSMS.Sprites.Summons.Ariel
 
 
         // AI
-        private const float StartWalkingDistance = 120f;
-        private const float StartWalkingDistanceEnemy = 300f;
-        private const float StopWalkingDistance = 80f;
+        private const float StartWalkingDistance = 100f;
+        private const float StopWalkingDistance = 30f;
         private const int   TargetUpdateInterval = 120;
         private const int   TeleportDistanceThreshold = 900;
 
@@ -79,7 +86,7 @@ namespace NeavaSMS.Sprites.Summons.Ariel
             Projectile.friendly = true;
             Projectile.minion = true;
             Projectile.penetrate = -1;
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
             Projectile.knockBack = 1f;
             Projectile.DamageType = DamageClass.Generic;
@@ -109,21 +116,22 @@ namespace NeavaSMS.Sprites.Summons.Ariel
             Tile tileBelow = Framing.GetTileSafely(tileX, tileY + 1);
             Tile tileBelow2 = Framing.GetTileSafely(tileX + 1, tileY + 1);
 
-            isOnGround =
-                (tileBelow.HasTile && Main.tileSolid[tileBelow.TileType]
-                || tileBelow2.HasTile && Main.tileSolid[tileBelow.TileType]);
+            isOnGround = (tileBelow.HasTile && Main.tileSolid[tileBelow.TileType] && !Main.tileSolidTop[tileBelow.TileType]) || 
+                (tileBelow2.HasTile && Main.tileSolid[tileBelow2.TileType] && !Main.tileSolidTop[tileBelow2.TileType]);
 
             groundedBuffer = (int)Projectile.localAI[1];
 
             if (isOnGround)
+            {
                 groundedBuffer = GroundedBufferTime;
+            }
             else if (groundedBuffer >= -30)
+            {
                 groundedBuffer--;
+            }
 
             isOnGround = groundedBuffer > 0;
             Projectile.localAI[1] = groundedBuffer;
-
-            float mod = Projectile.velocity.Y > 0 ? 1.2f : 1.0f;
 
             if (!isOnGround)
             {
@@ -148,6 +156,7 @@ namespace NeavaSMS.Sprites.Summons.Ariel
                 framelock = false;
             }
         }
+
 
         private void HandleTeleportation(Player player)
         {
@@ -178,16 +187,7 @@ namespace NeavaSMS.Sprites.Summons.Ariel
             Vector2 moveTo = targetPosition - Projectile.Center;
 
 
-            Rectangle attackHitbox;
-            if (summonData.CurrentAnimationState == SMSsummon.AnimationState.Attacking && Projectile.frame >= 6)
-            {
-                attackHitbox = GetAttackRectangle(summonData, 2);
-            }
-            else
-            {
-                attackHitbox = GetAttackRectangle(summonData, 1);
-            }
-
+            Rectangle attackHitbox = summonData.CurrentAnimationState == SMSsummon.AnimationState.Attacking && Projectile.frame >= 6 ? GetRectangle(summonData, "attack2") : GetRectangle(summonData, "attack1");
 
             bool target = false;
             CheckForHostileNPCs(attackHitbox, 0, DamageClass.Generic, true, out target);
@@ -305,7 +305,7 @@ namespace NeavaSMS.Sprites.Summons.Ariel
                         Projectile.owner
                     );
 
-                    Rectangle attackHitbox = GetUtlRectangle(summonData);
+                    Rectangle attackHitbox = GetRectangle(summonData, "ultimate");
 
                     if (!attackHitRegistered)
                     {
@@ -325,7 +325,7 @@ namespace NeavaSMS.Sprites.Summons.Ariel
 
                 if (Projectile.frame >= 2 && Projectile.frame <= 4)
                 {
-                    Rectangle attackHitbox = GetAttackRectangle(summonData, 1);
+                    Rectangle attackHitbox = GetRectangle(summonData, "attack1");
                     SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 
                     if (!attackHitRegistered)
@@ -336,7 +336,7 @@ namespace NeavaSMS.Sprites.Summons.Ariel
                 }
                 else if (Projectile.frame >= 7 && Projectile.frame <= 9)
                 {
-                    Rectangle attackHitbox = GetAttackRectangle(summonData, 2);
+                    Rectangle attackHitbox = GetRectangle(summonData, "attack2");
                     SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 
                     if (!attackHitRegistered)
@@ -376,8 +376,6 @@ namespace NeavaSMS.Sprites.Summons.Ariel
                 }
             }
         }
-
-
         private bool IsObstacleInPath(out int obstacleHeight)
         {
             int tileX = (int)(Projectile.Center.X / 16f);
@@ -386,29 +384,30 @@ namespace NeavaSMS.Sprites.Summons.Ariel
 
             obstacleHeight = 0;
 
-            for (int offset = 1; offset <= 6; offset++)
+            for (int offset = 1; offset <= 8; offset++)
             {
                 int baseTileX = tileX + (direction * offset);
-                for (int i = 0; i < 5; i++)
+
+                for (int i = 0; i < 3; i++)
                 {
                     Tile tileInPath = Framing.GetTileSafely(baseTileX, tileY - i);
 
+                    if (Main.netMode != NetmodeID.Server)
+                    {
+                        Vector2 tileWorldPosition = new Vector2(baseTileX * 16, (tileY - i) * 16);
+                        Dust.NewDustPerfect(tileWorldPosition, DustID.Electric, Vector2.Zero, 0, Color.Red, 1f).noGravity = true;
+                    }
+
                     if (tileInPath.HasTile && Main.tileSolid[tileInPath.TileType])
                     {
-                        if (Main.netMode != NetmodeID.Server)
-                        {
-                            Vector2 tileWorldPosition = new Vector2((tileX + (direction * offset)) * 16, (tileY - i) * 16);
-                            Dust.NewDustPerfect(tileWorldPosition, DustID.Electric, Vector2.Zero, 0, Color.Red, 1f).noGravity = true;
-                        }
-
-                        obstacleHeight = 1;
+                        int currentObstacleHeight = 1;
 
                         for (int heightCheck = 1; heightCheck < 10; heightCheck++)
                         {
                             Tile tileAbove = Framing.GetTileSafely(baseTileX, tileY - i - heightCheck);
                             if (tileAbove.HasTile && Main.tileSolid[tileAbove.TileType])
                             {
-                                obstacleHeight++;
+                                currentObstacleHeight++;
                             }
                             else
                             {
@@ -416,6 +415,21 @@ namespace NeavaSMS.Sprites.Summons.Ariel
                             }
                         }
 
+                        int baseTileXBehind = baseTileX - direction;
+                        for (int heightCheck = 0; heightCheck < 10; heightCheck++)
+                        {
+                            Tile tileBehind = Framing.GetTileSafely(baseTileXBehind, tileY - i - heightCheck);
+                            if (tileBehind.HasTile && Main.tileSolid[tileBehind.TileType])
+                            {
+                                currentObstacleHeight = Math.Max(currentObstacleHeight, heightCheck + 1);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+
+                        obstacleHeight = Math.Max(obstacleHeight, currentObstacleHeight);
                         return true;
                     }
                 }
@@ -423,6 +437,7 @@ namespace NeavaSMS.Sprites.Summons.Ariel
 
             return false;
         }
+
 
         private void AnimateProjectile(SMSsummon summonData)
         {
@@ -535,43 +550,16 @@ namespace NeavaSMS.Sprites.Summons.Ariel
 
             return false;
         }
-
-        private Rectangle GetAttackRectangle(SMSsummon summonData, int rectangleType)
+        private Rectangle GetRectangle(SMSsummon summonData, string mode)
         {
-            float widthScale = rectangleType == 1 ? 0.75f : 0.75f;
-            float heightScale = rectangleType == 1 ? 0.5f : 0.65f;
-            float verticalOffset = rectangleType == 1 ? -50f : -87f;
-            float horizontalOffsetMultiplier = rectangleType == 1 ? FrameWidth / 3f : FrameWidth / 5f;
-
-            float boxWidth = FrameWidth * widthScale;
-            float boxHeight = FrameHeight * heightScale;
+            rectangleSettings.TryGetValue(mode, out var settings);
 
             float directionMultiplier = summonData.spriteEffects == SpriteEffects.None ? 1f : -1f;
 
-            Vector2 rectangleOffset = new Vector2(horizontalOffsetMultiplier * directionMultiplier, verticalOffset);
-            Vector2 rectanglePosition = Projectile.Center + rectangleOffset;
+            float boxWidth = FrameWidth * settings.widthScale;
+            float boxHeight = FrameHeight * settings.heightScale;
 
-            return new Rectangle(
-                (int)(rectanglePosition.X - boxWidth / 2),
-                (int)(rectanglePosition.Y - boxHeight / 2),
-                (int)boxWidth,
-                (int)boxHeight
-            );
-        }
-
-        private Rectangle GetUtlRectangle(SMSsummon summonData)
-        {
-            float widthScale = 2;
-            float heightScale = 5;
-            float verticalOffset = 0;
-            float horizontalOffsetMultiplier = FrameWidth / 2f;
-
-            float boxWidth = FrameWidth * widthScale;
-            float boxHeight = FrameHeight * heightScale;
-
-            float directionMultiplier = summonData.spriteEffects == SpriteEffects.None ? 1f : -1f;
-
-            Vector2 rectangleOffset = new Vector2(horizontalOffsetMultiplier * directionMultiplier, verticalOffset);
+            Vector2 rectangleOffset = new Vector2(settings.horizontalOffsetMultiplier * directionMultiplier, settings.verticalOffset);
             Vector2 rectanglePosition = Projectile.Center + rectangleOffset;
 
             return new Rectangle(
