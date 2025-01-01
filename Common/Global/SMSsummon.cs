@@ -18,7 +18,8 @@ namespace NeavaSMS.Common.Global
         {
             Idle,
             Running,
-            Attacking
+            Attacking,
+            Ultimate
         }
 
         public AnimationState CurrentAnimationState = AnimationState.Idle;
