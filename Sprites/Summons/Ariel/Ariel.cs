@@ -86,7 +86,7 @@ namespace NeavaSMS.Sprites.Summons.Ariel
             Projectile.friendly = true;
             Projectile.minion = true;
             Projectile.penetrate = -1;
-            Projectile.tileCollide = false;
+            Projectile.tileCollide = true;
             Projectile.ignoreWater = true;
             Projectile.knockBack = 1f;
             Projectile.DamageType = DamageClass.Generic;
@@ -392,17 +392,17 @@ namespace NeavaSMS.Sprites.Summons.Ariel
                 {
                     Tile tileInPath = Framing.GetTileSafely(baseTileX, tileY - i);
 
-                    if (Main.netMode != NetmodeID.Server)
-                    {
-                        Vector2 tileWorldPosition = new Vector2(baseTileX * 16, (tileY - i) * 16);
-                        Dust.NewDustPerfect(tileWorldPosition, DustID.Electric, Vector2.Zero, 0, Color.Red, 1f).noGravity = true;
-                    }
+                    //if (Main.netMode != NetmodeID.Server)
+                    //{
+                    //    Vector2 tileWorldPosition = new Vector2(baseTileX * 16, (tileY - i) * 16);
+                    //    Dust.NewDustPerfect(tileWorldPosition, DustID.Electric, Vector2.Zero, 0, Color.Red, 1f).noGravity = true;
+                    //}
 
                     if (tileInPath.HasTile && Main.tileSolid[tileInPath.TileType])
                     {
                         int currentObstacleHeight = 1;
 
-                        for (int heightCheck = 1; heightCheck < 10; heightCheck++)
+                        for (int heightCheck = 1; heightCheck < 8; heightCheck++)
                         {
                             Tile tileAbove = Framing.GetTileSafely(baseTileX, tileY - i - heightCheck);
                             if (tileAbove.HasTile && Main.tileSolid[tileAbove.TileType])
@@ -441,7 +441,6 @@ namespace NeavaSMS.Sprites.Summons.Ariel
 
         private void AnimateProjectile(SMSsummon summonData)
         {
-
             if (idleTexture != null)
             {
                 Load();
@@ -452,25 +451,18 @@ namespace NeavaSMS.Sprites.Summons.Ariel
                 Projectile.frame = 1;
                 Projectile.frameCounter = 0;
                 previousAnimationState = summonData.CurrentAnimationState;
+
+                texture = summonData.CurrentAnimationState switch
+                {
+                    SMSsummon.AnimationState.Idle => idleTexture,
+                    SMSsummon.AnimationState.Attacking => attackTexture,
+                    SMSsummon.AnimationState.Running => runTexture,
+                    SMSsummon.AnimationState.Ultimate => ultTexture,
+                    _ => texture
+                };
             }
 
-            switch (summonData.CurrentAnimationState)
-            {
-                case SMSsummon.AnimationState.Idle:
-                    texture = idleTexture;
-                    break;
-                case SMSsummon.AnimationState.Attacking:
-                    texture = attackTexture;
-                    break;
-                case SMSsummon.AnimationState.Running:
-                    texture = runTexture;
-                    break;
-                case SMSsummon.AnimationState.Ultimate:
-                    texture = ultTexture;
-                    break;
-            }
-
-            int totalFrames = Math.Max(texture.Height / FrameHeight,1);
+            int totalFrames = Math.Max(texture.Height / FrameHeight, 1);
             Projectile.frameCounter++;
 
             if (ultimateCooldown > 0)
@@ -482,34 +474,28 @@ namespace NeavaSMS.Sprites.Summons.Ariel
                 Projectile.frame = (Projectile.frame + 1) % totalFrames;
             }
 
-            if (summonData.CurrentAnimationState == SMSsummon.AnimationState.Attacking)
+            if (summonData.CurrentAnimationState is SMSsummon.AnimationState.Attacking or SMSsummon.AnimationState.Ultimate)
             {
-                if (Projectile.frame == 5 || Projectile.frame == 6 || Projectile.frame == 11 || Projectile.frame == 12)
+                bool isFrameActive = summonData.CurrentAnimationState switch
                 {
-                    isAtking = false;
-                }
-                else
+                    SMSsummon.AnimationState.Attacking => Projectile.frame is not (5 or 6 or 11 or 12),
+                    SMSsummon.AnimationState.Ultimate => Projectile.frame is not (20 or 21),
+                    _ => true
+                };
+
+                isAtking = isFrameActive;
+
+                if (isFrameActive)
                 {
-                    isAtking = true;
                     groundedBuffer = GroundedBufferTime * 5;
                     Projectile.velocity.Y = 0;
-                }
-            }
-            else if (summonData.CurrentAnimationState == SMSsummon.AnimationState.Ultimate)
-            {
-                if (Projectile.frame == 20 || Projectile.frame == 21)
-                {
-                    ultimateCooldown = UltimateCooldownMax;
-                    isAtking = false;
-                }
-                else
-                {
-                    isAtking = true;
-                    groundedBuffer = GroundedBufferTime * 5;
-                    Projectile.velocity.Y = 0;
+
+                    if (summonData.CurrentAnimationState == SMSsummon.AnimationState.Ultimate)
+                        ultimateCooldown = UltimateCooldownMax;
                 }
             }
         }
+
 
         public int frameCooldown(SMSsummon summonData)
         {
@@ -545,8 +531,8 @@ namespace NeavaSMS.Sprites.Summons.Ariel
             Main.EntitySpriteDraw(texture, drawPosition, frame, lightColor, Projectile.rotation,
                 new Vector2(FrameWidth / 2, FrameHeight / 2), Projectile.scale, summonData.spriteEffects, 0);
 
-            DrawATKRectangle(lightColor, summonData);
-            DrawATKRectangle2(lightColor, summonData);
+            //DrawATKRectangle(lightColor, summonData);
+            //DrawATKRectangle2(lightColor, summonData);
 
             return false;
         }

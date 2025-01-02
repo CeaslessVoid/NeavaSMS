@@ -36,7 +36,7 @@
               "RelativeDocumentMoniker": "Sprites\\Summons\\Ariel\\Ariel.cs",
               "ToolTip": "C:\\Users\\Neava\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\NeavaSMS\\Sprites\\Summons\\Ariel\\Ariel.cs",
               "RelativeToolTip": "Sprites\\Summons\\Ariel\\Ariel.cs",
-              "ViewState": "AQIAAOwBAAAAAAAAAAAAADMBAAAqAAAA",
+              "ViewState": "AQIAAAQAAAAAAAAAAAAqwF0AAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-01T10:55:36.233Z",
               "EditorCaption": ""
@@ -51,8 +51,7 @@
               "RelativeToolTip": "Sprites\\Base\\BaseSummon.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-01T10:53:59.762Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-01T10:53:59.762Z"
             },
             {
               "$type": "Document",
